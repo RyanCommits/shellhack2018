@@ -4,6 +4,7 @@ import Clarifai from 'clarifai';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
+import { uploadImage } from '../../lib/uploads';
 
 const styles = StyleSheet.create({
     container: {
@@ -22,6 +23,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
     };
 
     async componentDidMount() {
+        console.log('cameraView');
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
@@ -41,6 +43,13 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
             .then((image) => {
                 console.log(image);
                 this.setState({ imageUri: image.uri });
+
+                uploadImage(
+                    image.base64,
+                    (snapshot) => console.log(snapshot), // this.props.showLoader(),
+                    (error) => console.log(error.message),
+                    (done) => console.log(done, 'DONE')
+                );
                 // return this.predictImage(app, image);
             })
             .catch((err) => {
@@ -64,9 +73,13 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
 
         // RN never unmounts camera. Unmount camera manually
         if (hasCameraPermission === null || !this.props.navigation.isFocused()) {
-            return <View />;
+            return <View/>;
         } else if (hasCameraPermission === false) {
-            return <Text>No access to camera</Text>;
+            return (
+                <Text>
+No access to camera
+                </Text>
+            );
         }
 
         if (this.state.imageUri) {
@@ -106,7 +119,9 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                             }}
                         >
                             <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                                {' '}Flip{' '}
+                                {' '}
+Flip
+                                {' '}
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
