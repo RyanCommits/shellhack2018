@@ -16,6 +16,10 @@ const ClientNavigator = createBottomTabNavigator({
 const ProfessionalNavigator = createBottomTabNavigator({
     dashboard: { screen: ProDashboard },
     clientFoodList: { screen: ClientFoodList },
+}, {
+    navigationOptions: {
+        tabBarVisible: false,
+    },
 });
 
 export const MainNavigator = createBottomTabNavigator({
