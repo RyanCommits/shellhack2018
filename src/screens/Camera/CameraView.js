@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withNavigationFocus } from 'react-navigation';
 import Clarifai from 'clarifai';
 import { Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
 import { uploadImage } from '../../lib/uploads';
