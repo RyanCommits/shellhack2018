@@ -107,8 +107,6 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
             { name: this.state.foodName }
         );
 
-        console.log('send image to trainer');
-
         this.onCancel();
     }
 
