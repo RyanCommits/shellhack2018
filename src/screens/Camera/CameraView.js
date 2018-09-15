@@ -68,16 +68,8 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
             base64: true,
             quality: 0.99,
         })
-            .then(async (image) => {
+            .then((image) => {
                 this.setState({ imageUri: image.uri });
-
-                const response = await fetch(image.uri);
-                const blob = await response.blob();
-
-                uploadImage(
-                    blob,
-                    this.props.uid,
-                );
 
                 return this.predictImage(app, image);
             })
@@ -104,6 +96,21 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                 console.log(err);
             });
     };
+
+    sendImageToTrainer = async () => {
+        const response = await fetch(this.state.imageUri);
+        const blob = await response.blob();
+
+        await uploadImage(
+            blob,
+            this.props.uid,
+            { name: this.state.foodName }
+        );
+
+        console.log('send image to trainer');
+
+        this.onCancel();
+    }
 
     onCancel = () => {
         this.setState({
@@ -140,7 +147,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                         <Button
                             title="Send To Nutritionist!"
                             raised
-                            // onPress={this.props.onComplete}
+                            onPress={this.sendImageToTrainer}
                         />
                         <Button
                             title="Cancel!"

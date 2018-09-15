@@ -5,35 +5,36 @@ const METADATA = {
     contentType: 'image/jpeg',
 };
 
-export const uploadImage = (file, uid) => {
+export const uploadImage = (file, uid, metadata) => {
     const timestamp = new Date().getTime();
     const name = `${timestamp}-media.jpg`;
     // Points to the root reference
     const storageRef = firebase.storage().ref();
+    // );
+    return new Promise((resolve, reject) => {
+        const imageRef = storageRef.child(`images/${name}`);
+        imageRef.put(file, METADATA)
+            .then(() => {
+                return imageRef.getDownloadURL();
+            })
+            .then(async (url) => {
+                console.log(url, 'URL');
 
-    // Upload file and metadata to the object
-    // Hardcoded to 'images' bucket for now
-    const uploadTask = storageRef.child(`images/${name}`).put(file, METADATA);
-
-    // Listen for state changes, errors, and completion of the upload.
-    return uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-        () => console.log('loading'),
-        (error) => console.log(error.message),
-        () => {
-            // Upload completed successfully, now we can get the download URL
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                console.log('File available at', downloadURL);
                 const foodsRef = firebase.database().ref(`foods/${uid}`);
 
-                foodsRef.set({
+                await foodsRef.push({
                     approvedBy: false,
-                    url: downloadURL,
+                    url,
                     createdAt: timestamp,
+                    ...metadata,
                 });
+
+                return resolve();
             })
-                .catch((e) => console.log(e.message));
-        }
-    );
+            .catch((error) => {
+                reject(error);
+            });
+    });
 };
 
 /**
