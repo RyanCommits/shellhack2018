@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withNavigationFocus } from 'react-navigation';
 import Clarifai from 'clarifai';
-import { Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Dimensions, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
@@ -16,27 +16,31 @@ const styles = StyleSheet.create({
     },
     reviewContainer: {
         flex: 1,
-        marginTop: 30,
-        alignItems: 'center',
+        padding: 30,
     },
     foodImage: {
-        width: Dimensions.get('screen').width * 0.75,
         height: Dimensions.get('screen').width * 0.75,
     },
-    foodDetailsContainer: {
-        flex: 1,
-        paddingTop: 30,
-    },
     titleRow: {
-        flex: 1,
+        marginTop: 25,
+        paddingBottom: 5,
         flexDirection: 'row',
-        justifyContent: 'center',
+        borderBottomColor: '#F8BA85',
+        borderBottomWidth: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
     },
     buttonContainer: {
         flex: 1,
-        height: 500,
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
+    },
+    largeText: {
+        fontSize: 36,
+        fontWeight: 'bold',
+    },
+    normalText: {
+        fontSize: 24,
     },
 });
 
@@ -134,22 +138,48 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
             return (
                 <View style={styles.reviewContainer}>
                     <Image style={styles.foodImage} source={{ uri: this.state.imageUri }}></Image>
-                    <View style={styles.foodDetailsContainer}>
-                        <View style={styles.titleRow}>
-                            <Text>
-                                {this.state.foodName}
-                            </Text>
-                        </View>
+                    <View style={styles.titleRow}>
+                        <Text style={styles.largeText}>
+                            {this.state.foodName}
+                        </Text>
+                        <Text style={styles.normalText}>
+                                1 cup
+                        </Text>
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button
+                            containerStyle={{
+                                borderRadius: 25,
+                            }}
+                            buttonStyle={{
+                                paddingLeft: 20,
+                                paddingRight: 20,
+                                borderRadius: 25,
+                                backgroundColor: '#F8BA85',
+                                borderWidth: 0,
+                            }}
+                            titleStyle={{ fontSize: 18 }}
                             title="Send To Nutritionist!"
                             raised
                             onPress={this.sendImageToTrainer}
                         />
                         <Button
-                            title="Cancel!"
-                            raised
+                            containerStyle={{
+                                backgroundColor: 'transparent',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                borderRadius: 0,
+                                elevation: 0,
+                            }}
+                            buttonStyle={{
+                                elevation: 0,
+                                backgroundColor: 'transparent',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                borderRadius: 0,
+                            }}
+                            titleStyle={{ fontSize: 18, color: '#F8BA85' }}
+                            title="Cancel"
                             onPress={this.onCancel}
                         />
                     </View>
