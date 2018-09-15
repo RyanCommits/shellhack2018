@@ -67,7 +67,7 @@ export const UserType = wrapWithContext(class Friends extends Component {
                         width: "100%",
                         height: "100%"
                     }}
-                    source={require('../../assets/images/background_1.jpg')}
+                    source={require('../../assets/images/background_1.png')}
                 >
                     <Text style={styles.header}>
                         Which best describes You?
