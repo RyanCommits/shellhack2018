@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
+import { StyleSheet, Text, ScrollView, View } from 'react-native';
 import { Card } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
@@ -9,8 +9,6 @@ import FoodApprovalOutcome from '../components/FoodApprovalOutcome';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 });
 
@@ -52,33 +50,35 @@ export const ProDashboard = wrapWithContext(class ProDashboard extends Component
 
     render() {
         return (
-            <ScrollView contentContainerStyle={styles.container}>
-                {
-                        this.state.foods.map((food) => {
-                            return (
-                                <Card
-                                    key={food.id}
-                                    title='Food name here (from meta)'
-                                    image={{ uri: food.url }}
-                                >
-                                    <Text style={{ marginBottom: 10 }}>
-                                        Macros here
-                                    </Text>
-                                    {
-                                        food.approvedBy !== false ?
-                                            <FoodApprovalOutcome food={food}/>
-                                            :
-                                            <FoodApprovalButtons
-                                                handleApproveFood={() => this.handleApproveFood(food)}
-                                                handleDenyFood={() => this.handleDenyFood(food)}
-                                            />
-                                    }
+            <View style={styles.container}>
+                <ScrollView>
+                    {
+                    this.state.foods.map((food) => {
+                        return (
+                            <Card
+                                key={food.id}
+                                title='Food name here (from meta)'
+                                image={{ uri: food.url }}
+                            >
+                                <Text style={{ marginBottom: 10 }}>
+                                    Macros here
+                                </Text>
+                                {
+                                    food.approvedBy !== false ?
+                                        <FoodApprovalOutcome food={food}/>
+                                        :
+                                        <FoodApprovalButtons
+                                            handleApproveFood={() => this.handleApproveFood(food)}
+                                            handleDenyFood={() => this.handleDenyFood(food)}
+                                        />
+                                }
 
-                                </Card>
-                            );
-                        })
-                    }
-            </ScrollView>
+                            </Card>
+                        );
+                    })
+                }
+                </ScrollView>
+            </View>
         );
     }
 });
