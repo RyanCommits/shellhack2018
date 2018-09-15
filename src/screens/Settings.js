@@ -15,6 +15,7 @@ export class Settings extends Component {
     eraseCache = () => {
         firebase.auth().signOut();
         AsyncStorage.removeItem('fb_token');
+        AsyncStorage.removeItem('push_token');
     }
 
     render() {

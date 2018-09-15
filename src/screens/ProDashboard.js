@@ -58,7 +58,7 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>
-                        Your Client
+                        Your Clients
                     </Text>
                 </View>
                 <View style={styles.listContainer}>
@@ -67,7 +67,6 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
                             return (
                                 <ListItem
                                     style={{
-                                        height: '100%',
                                         width: 500,
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',

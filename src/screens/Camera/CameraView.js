@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     },
     cameraContainer: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        
     },
     reviewContainer: {
         flex: 1,
@@ -196,38 +199,40 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                 >
                     <View
                         style={{
-                            flex: 1,
-                            backgroundColor: 'transparent',
-                            flexDirection: 'row',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            height: 85,
+                            marginBottom: 15,
                         }}
                     >
-                        <TouchableOpacity
-                            style={{
-                                flex: 0.1,
-                                alignSelf: 'flex-end',
-                                alignItems: 'center',
-                            }}
-                            onPress={() => {
-                                this.setState({
-                                    type: this.state.type === Camera.Constants.Type.back
-                                    ? Camera.Constants.Type.front
-                                    : Camera.Constants.Type.back,
-                                });
-                            }}
-                        >
-                            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                                {' '}
-Flip
-                                {' '}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                        <Button
                             onPress={this.takePicture}
-                        >
-                            <Text style={{ fontSize: 30, marginTop: 20, color: 'white' }}>
-                                Take Picture
-                            </Text>
-                        </TouchableOpacity>
+                            title=''
+                            buttonStyle={{
+                            backgroundColor: "#fff",
+                            opacity: 0.7,
+                            width: 60,
+                            height: 60,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            marginBottom: -180,
+                            borderRadius: 33
+                            }}
+                        />
+                        <Button
+                            onPress={this.takePicture}
+                            title=''
+                            buttonStyle={{
+                            backgroundColor: "#fff",
+                            opacity: 0.6,
+                            width: 80,
+                            height: 80,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            marginTop: -10,
+                            borderRadius: 40
+                            }}
+                        />
                     </View>
                 </Camera>
             </View>
