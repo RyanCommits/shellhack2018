@@ -2,20 +2,20 @@ import { createBottomTabNavigator } from 'react-navigation';
 import { CameraView } from 'screens/Camera/CameraView';
 import { WelcomeScreen } from 'screens/WelcomeScreen';
 import { HandleBoot } from 'HandleBoot';
-import { Friends } from 'screens/Friends';
 import { Settings } from 'screens/Settings';
 import { UserType } from 'screens/UserType';
 import { ProDashboard } from 'screens/ProDashboard';
 import { TrainerSelect } from 'screens/TrainerSelect';
+import { ClientFoodList } from 'screens/ClientFoodList';
 
 const ClientNavigator = createBottomTabNavigator({
     camera: { screen: CameraView },
-    friends: { screen: Friends },
     settings: { screen: Settings },
 });
 
 const ProfessionalNavigator = createBottomTabNavigator({
     dashboard: { screen: ProDashboard },
+    clientFoodList: { screen: ClientFoodList },
 });
 
 export const MainNavigator = createBottomTabNavigator({

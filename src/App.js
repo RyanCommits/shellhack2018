@@ -1,5 +1,5 @@
 import React from 'react';
-import { Notifications } from 'expo';
+import { Notifications, Permissions } from 'expo';
 import Clarifai from 'clarifai';
 import firebase from 'firebase';
 import { emitter } from 'lib/emitter';
@@ -47,7 +47,9 @@ export class App extends React.Component {
     };
 
     async componentDidMount() {
+        await Permissions.askAsync(Permissions.NOTIFICATIONS);
         const token = await AsyncStorage.getItem('fb_token');
+
         this.handleUserNavigation(token);
 
         emitter.on('new_user_token', this.startFirebase);
