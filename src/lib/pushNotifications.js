@@ -7,9 +7,7 @@ export const handlePushToken = async (uid) => {
     if (!previousToken) {
         const token = await Notifications.getExpoPushTokenAsync();
         const userRef = firebase.database().ref('pushTokens');
-        userRef.update({
-            [uid]: token,
-        });
+        userRef.update({ [uid]: token });
         AsyncStorage.setItem('push_token', token);
     }
 };
