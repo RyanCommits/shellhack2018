@@ -4,19 +4,27 @@ import { WelcomeScreen } from 'screens/WelcomeScreen';
 import { HandleBoot } from 'HandleBoot';
 import { Friends } from 'screens/Friends';
 import { Settings } from 'screens/Settings';
+import { UserType } from 'screens/UserType';
+import { ProDashboard } from 'screens/ProDashboard';
+import { TrainerSelect } from 'screens/TrainerSelect';
 
-const AppNavigator = createBottomTabNavigator({
+const ClientNavigator = createBottomTabNavigator({
     camera: { screen: CameraView },
     friends: { screen: Friends },
     settings: { screen: Settings },
-}, {
-    animationEnabled: true,
+});
+
+const ProfessionalNavigator = createBottomTabNavigator({
+    dashboard: { screen: ProDashboard },
 });
 
 export const MainNavigator = createBottomTabNavigator({
     root: { screen: HandleBoot },
     welcome: { screen: WelcomeScreen },
-    main: AppNavigator,
+    router: UserType,
+    client: ClientNavigator,
+    trainerSelect: { screen: TrainerSelect },
+    professional: ProfessionalNavigator,
 }, {
     animationEnabled: true,
     navigationOptions: {
