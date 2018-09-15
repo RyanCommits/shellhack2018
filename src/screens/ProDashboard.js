@@ -1,85 +1,105 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView, View } from 'react-native';
-import { Card } from 'react-native-elements';
+import { View, StyleSheet, Text } from 'react-native';
+import { Button, ListItem } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
-import FoodApprovalButtons from '../components/FoodApprovalButtons';
-import FoodApprovalOutcome from '../components/FoodApprovalOutcome';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    titleContainer: {
+        paddingHorizontal: 50,
+        marginTop: 50,
+    },
+    titleText: {
+        color: '#383B41',
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        flex: 1,
+        paddingHorizontal: 50,
+        paddingTop: 20,
     },
 });
 
-export const ProDashboard = wrapWithContext(class ProDashboard extends Component {
+export const ProDashboard = wrapWithContext(class Friends extends Component {
     state = {
-        foods: [],
+        clients: [],
     };
 
+
     componentDidMount() {
-        const ref = firebase.database().ref('foods');
+        const uid = 'algkjew3323jg';
+        const proRef = firebase.database().ref(`users/${ uid }/clients`);
+        const clientRef = firebase.database().ref('users');
 
-        ref.on('child_added', (snapshot) => {
-            this.setState((prevState) => ({
-                foods: [...prevState.foods, { id: snapshot.key, ...snapshot.val() }],
-            }));
+        proRef.on('child_added', (snapshot) => {
+            const user_id = snapshot.val();
+            clientRef.child(user_id).once('value', (snapshot) => {
+                const user = snapshot.val();
+                this.setState((prevState) => ({
+                    clients: [...prevState.clients, { ...user, uid: snapshot.key }],
+                }));
+            });
         });
-
-        ref.on('child_changed', (snapshot) => {
-            const oldFoodIndex = this.state.foods.findIndex((food) => food.id === snapshot.key);
-            const newFood = { id: snapshot.key, ...snapshot.val() };
-
-            this.setState(() => ({
-                foods: Object.assign([], this.state.foods, { [oldFoodIndex]: newFood }),
-            }));
-        });
-    }
-
-    handleApproveFood(food) {
-        const foodRef = firebase.database().ref(`foods/${food.id}`);
-
-        foodRef.update({ approvedBy: firebase.auth().currentUser.uid });
-    }
-
-    handleDenyFood(food) {
-        const foodRef = firebase.database().ref(`foods/${food.id}`);
-
-        foodRef.update({ approvedBy: 'denied' });
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <ScrollView>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>
+                        Your Client
+                    </Text>
+                </View>
+                <View style={styles.listContainer}>
                     {
-                    this.state.foods.map((food) => {
-                        return (
-                            <Card
-                                key={food.id}
-                                title='Food name here (from meta)'
-                                image={{ uri: food.url }}
-                            >
-                                <Text style={{ marginBottom: 10 }}>
-                                    Macros here
-                                </Text>
-                                {
-                                    food.approvedBy !== false ?
-                                        <FoodApprovalOutcome food={food}/>
-                                        :
-                                        <FoodApprovalButtons
-                                            handleApproveFood={() => this.handleApproveFood(food)}
-                                            handleDenyFood={() => this.handleDenyFood(food)}
-                                        />
-                                }
+                        this.state.clients.map((client, i) => {
+                            return (
+                                <ListItem
+                                    style={{
+                                        height: '100%',
+                                        width: 500,
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={() => this.onSelect(client.uid)}
+                                    key={i}
+                                    leftAvatar={{
+                                        source: { uri: client.photoURL },
+                                        rounded: true,
+                                        size: 'large',
+                                        height: 75,
+                                        width: 75,
 
-                            </Card>
-                        );
-                    })
-                }
-                </ScrollView>
+                                    }}
+                                    title={client.name}
+                                    scaleProps={{
+                                        friction: 90,
+                                        tension: 100,
+                                        activeScale: 0.95,
+                                    }}
+                                    containerStyle={{
+                                        height: 100,
+                                        width: 250,
+                                        marginTop: 30,
+                                        borderRadius: 45,
+                                        elevation: 10,
+                                        shadowOffset: { width: 1, height: 1 },
+                                        shadowOpacity: 0.9,
+                                        shadowRadius: 25,
+                                        shadowColor: 'grey',
+                                    }}
+                                />
+                            );
+                        })
+                    }
+                </View>
             </View>
         );
     }
 });
-

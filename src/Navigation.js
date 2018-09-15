@@ -6,6 +6,7 @@ import { Settings } from 'screens/Settings';
 import { UserType } from 'screens/UserType';
 import { ProDashboard } from 'screens/ProDashboard';
 import { TrainerSelect } from 'screens/TrainerSelect';
+import { ClientFoodList } from 'screens/ClientFoodList';
 
 const ClientNavigator = createBottomTabNavigator({
     camera: { screen: CameraView },
@@ -14,6 +15,7 @@ const ClientNavigator = createBottomTabNavigator({
 
 const ProfessionalNavigator = createBottomTabNavigator({
     dashboard: { screen: ProDashboard },
+    clientFoodList: { screen: ClientFoodList },
 });
 
 export const MainNavigator = createBottomTabNavigator({
