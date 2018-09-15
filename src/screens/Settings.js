@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, AsyncStorage } from 'react-native';
 import { Button } from 'react-native-elements';
+import firebase from 'firebase';
 
 const styles = StyleSheet.create({
     container: {
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
 
 export class Settings extends Component {
     eraseCache = () => {
+        firebase.auth().signOut();
         AsyncStorage.removeItem('fb_token');
     }
 
