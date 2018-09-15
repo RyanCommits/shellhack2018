@@ -18,7 +18,8 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
     };
 
     componentDidMount() {
-        const ref = firebase.database().ref('foods');
+        const { uid } = this.props.navigation.state.params;
+        const ref = firebase.database().ref(`foods/${uid}`);
 
         ref.on('child_added', (snapshot) => {
             this.setState((prevState) => ({
@@ -37,13 +38,15 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
     }
 
     handleApproveFood = (food) => {
-        const foodRef = firebase.database().ref(`foods/${food.id}`);
+        const { uid } = this.props.navigation.state.params;
+        const foodRef = firebase.database().ref(`foods/${uid}/${food.id}`);
 
         foodRef.update({ approvedBy: firebase.auth().currentUser.uid });
     }
 
     handleDenyFood = (food) => {
-        const foodRef = firebase.database().ref(`foods/${food.id}`);
+        const { uid } = this.props.navigation.state.params;
+        const foodRef = firebase.database().ref(`foods/${uid}/${food.id}`);
 
         foodRef.update({ approvedBy: 'denied' });
     }

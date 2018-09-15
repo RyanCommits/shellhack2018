@@ -31,21 +31,26 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
         clients: [],
     };
 
-
     componentDidMount() {
-        const uid = 'algkjew3323jg';
-        const proRef = firebase.database().ref(`users/${ uid }/clients`);
+        const proRef = firebase.database().ref(`users/${this.props.uid}/clients`);
         const clientRef = firebase.database().ref('users');
 
         proRef.on('child_added', (snapshot) => {
-            const user_id = snapshot.val();
-            clientRef.child(user_id).once('value', (snapshot) => {
+            const userId = snapshot.val();
+            clientRef.child(userId).once('value', (snapshot) => {
                 const user = snapshot.val();
                 this.setState((prevState) => ({
                     clients: [...prevState.clients, { ...user, uid: snapshot.key }],
                 }));
             });
         });
+    }
+
+    onSelect = (uid) => {
+        this.props.navigation.navigate(
+            'clientFoodList',
+            { uid }
+        );
     }
 
     render() {
