@@ -1,21 +1,38 @@
 import firebase from 'firebase';
 
-// const transformBase64 = (string) => {
+// Create the file metadata
+const METADATA = {
+    contentType: 'image/jpeg',
+};
 
-// }
-
-export const uploadImage = (file, handleSnapshot, handleError, handleDone) => {
-    // console.log(file.name);
+export const uploadImage = (file, uid) => {
+    const timestamp = new Date().getTime();
+    const name = `${timestamp}-media.jpg`;
     // Points to the root reference
     const storageRef = firebase.storage().ref();
 
     // Upload file and metadata to the object
     // Hardcoded to 'images' bucket for now
-    const uploadTask = storageRef.child('images/test.jpg').putString(file, 'base64');
+    const uploadTask = storageRef.child(`images/${name}`).put(file, METADATA);
 
     // Listen for state changes, errors, and completion of the upload.
     return uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-        handleSnapshot, handleError, handleDone
+        () => console.log('loading'),
+        (error) => console.log(error.message),
+        () => {
+            // Upload completed successfully, now we can get the download URL
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                const foodsRef = firebase.database().ref(`foods/${uid}`);
+
+                foodsRef.set({
+                    approvedBy: false,
+                    url: downloadURL,
+                    createdAt: timestamp,
+                });
+            })
+                .catch((e) => console.log(e.message));
+        }
     );
 };
 
@@ -58,11 +75,5 @@ export const uploadImage = (file, handleSnapshot, handleError, handleDone) => {
         }
 
     handleDone
-    () => {
-            // Upload completed successfully, now we can get the download URL
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                // return here
-                console.log('File available at', downloadURL);
-            })
-            .catch((e) => console.log(e.message));
+
  */

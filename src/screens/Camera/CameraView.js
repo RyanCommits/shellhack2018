@@ -30,26 +30,31 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
 
     cameraRef = React.createRef();
 
-    takePicture = () => {
+    takePicture = async () => {
         const { app } = this.props;
-        console.log(app, this.props, 'o9');
+        // console.log(app, this.props, 'o9');
         // this.props.showLoader();
 
         // setTimeout(() => {
         //     this.props.hideLoader();
         // }, 5000)
         process.nextTick = setImmediate;
-        this.cameraRef.current.takePictureAsync({ base64: true, quality: 0.99 })
-            .then((image) => {
-                console.log(image);
+        this.cameraRef.current.takePictureAsync({
+            allowEditing: true,
+            base64: true,
+            quality: 0.99,
+        })
+            .then(async (image) => {
                 this.setState({ imageUri: image.uri });
 
+                const response = await fetch(image.uri);
+                const blob = await response.blob();
+
                 uploadImage(
-                    image.base64,
-                    (snapshot) => console.log(snapshot), // this.props.showLoader(),
-                    (error) => console.log(error.message),
-                    (done) => console.log(done, 'DONE')
+                    blob,
+                    this.props.uid
                 );
+
                 // return this.predictImage(app, image);
             })
             .catch((err) => {
