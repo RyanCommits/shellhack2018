@@ -37,11 +37,11 @@ const styles = StyleSheet.create({
 
 export const UserType = wrapWithContext(class Friends extends Component {
     componentDidMount() {
-        // if (this.props.userType === 'client') {
-        //     this.props.navigation.navigate('trainerSelect');
-        // } else if (this.props.userType === 'professional') {
-        //     this.props.navigation.navigate('professional');
-        // }
+        if (this.props.userType === 'client') {
+            this.props.navigation.navigate('trainerSelect');
+        } else if (this.props.userType === 'professional') {
+            this.props.navigation.navigate('professional');
+        }
     }
 
     onClient = () => {
