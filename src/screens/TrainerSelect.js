@@ -37,17 +37,17 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
 
             if (user.userType === 'professional') {
                 this.setState((prevState) => ({
-                    trainers: [...prevState.trainers, user],
+                    trainers: [...prevState.trainers, { ...user, uid: snapshot.key }],
                 }));
             }
         });
     }
 
-    onProfessional = () => {
+    onSelect = (uid) => {
         const userRef = firebase.database().ref(`users/${this.props.uid}`);
 
-        userRef.update({ userType: 'professional' });
-        this.props.navigation.navigate('professional');
+        userRef.update({ professional: uid });
+        this.props.navigation.navigate('client');
     }
 
     render() {
@@ -63,6 +63,7 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
                         this.state.trainers.map((trainer, i) => {
                             return (
                                 <ListItem
+                                    onPress={() => this.onSelect(trainer.uid)}
                                     key={i}
                                     leftAvatar={{
                                         source: { uri: trainer.photoURL },
