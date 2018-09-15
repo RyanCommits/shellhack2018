@@ -67,11 +67,20 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
                         this.state.trainers.map((trainer, i) => {
                             return (
                                 <ListItem
+                                    style={{
+                                      height: '100%',
+                                      width: 500,
+                                      justifyContent: 'flex-start',
+                                      alignItems: 'center'
+                                    }}
                                     onPress={() => this.onSelect(trainer.uid)}
                                     key={i}
                                     leftAvatar={{
                                         source: { uri: trainer.photoURL },
                                         rounded: true,
+                                        size:"large",
+                                        height: 75,
+                                        width: 75
                                     }}
                                     title={trainer.name}
                                     scaleProps={{
@@ -81,14 +90,14 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
                                     }}
                                     containerStyle={{
                                         height: 100,
+                                        width: 250,
                                         marginTop: 30,
+                                        borderRadius: 45,
+                                        elevation: 10,
                                         shadowOffset: { width: 1, height: 1 },
                                         shadowOpacity: 0.9,
                                         shadowRadius: 25,
-                                        borderRadius: 25,
                                         shadowColor: 'grey',
-                                        borderWidth: 0.5,
-                                        elevation: 3,
                                     }}
                                 />
                             );
