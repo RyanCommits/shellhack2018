@@ -1,0 +1,141 @@
+{
+    "extends": [
+        "@flexshopper/flexshopper",
+        "plugin:flowtype/recommended",
+        "plugin:react/recommended",
+        "plugin:jest/recommended"
+    ],
+    "globals": {
+        "__DEV__": false,
+        "__TIRES__": false,
+        "IS_SIMULATOR": false,
+        "LOG_LEVEL": false
+    },
+    "parser": "babel-eslint",
+    "plugins": [
+        "classes",
+        "flowtype",
+        "jest",
+        "react",
+        "react-native"
+    ],
+    "rules": {
+        "no-unused-expressions": 0,
+        "react-native/no-unused-styles": 2,
+        "classes/name": [
+            "error",
+            "class",
+            "method"
+        ],
+        "import/no-default-export": "error",
+        "import/no-nodejs-modules": [
+            "error",
+            {
+                "allow": [
+                    "events"
+                ]
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-commonjs": [
+            "error",
+            {
+                "allowRequire": false
+            }
+        ],
+        "global-require": [
+            "error"
+        ],
+        "prefer-arrow-callback": [
+            "error",
+            {
+                "allowNamedFunctions": true
+            }
+        ],
+        "react/jsx-no-bind": "warn",
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "react/jsx-boolean-value": [
+            "error",
+            "never"
+        ],
+        "react/jsx-closing-bracket-location": "error",
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-equals-spacing": [
+            "error",
+            "never"
+        ],
+        "react/jsx-wrap-multilines": [
+            "error",
+            {
+                "return": "parens-new-line"
+            }
+        ],
+        "react/jsx-first-prop-new-line": [
+            "error",
+            "multiline-multiprop"
+        ],
+        "react/jsx-tag-spacing": [
+            "error",
+            {
+                "beforeSelfClosing": "never",
+                "beforeClosing": "never"
+            }
+        ],
+        "react/jsx-curly-brace-presence": [
+            "warn",
+            "never"
+        ],
+        "react/jsx-one-expression-per-line": "error",
+        "react/jsx-no-undef": "error",
+        "react/jsx-no-target-blank": "error",
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-no-comment-textnodes": "error",
+        "react/jsx-key": "error",
+        "react/jsx-pascal-case": "error",
+        "strict": "off",
+        "class-methods-use-this": [
+            "error",
+            {
+                "exceptMethods": [
+                    "render",
+                    "getInitialState",
+                    "getDefaultProps",
+                    "componentWillMount",
+                    "componentDidMount",
+                    "componentWillReceiveProps",
+                    "shouldComponentUpdate",
+                    "componentWillUpdate",
+                    "componentDidUpdate",
+                    "componentWillUnmount"
+                ]
+            }
+        ]
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "settings": {
+        "flowtype": {
+            "onlyFilesWithFlowAnnotation": true
+        },
+        "import/resolver": {
+            "babel-module": {},
+            "node": {
+                "moduleDirectory": [
+                    "node_modules",
+                    "src/"
+                ]
+            }
+        }
+    }
+}
