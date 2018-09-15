@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export const UserType = wrapWithContext(class Friends extends Component {
     componentDidMount() {
         if (this.props.userType === 'client') {
-            this.props.navigation.navigate('professional');
+            this.props.navigation.navigate('client');
         } else if (this.props.userType === 'professional') {
             this.props.navigation.navigate('professional');
         }
@@ -25,7 +25,7 @@ export const UserType = wrapWithContext(class Friends extends Component {
         const userRef = firebase.database().ref(`users/${this.props.uid}`);
 
         userRef.update({ userType: 'client' });
-        this.props.navigation.navigate('client');
+        this.props.navigation.navigate('trainerSelect');
     }
 
     onProfessional = () => {

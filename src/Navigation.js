@@ -6,6 +6,7 @@ import { Friends } from 'screens/Friends';
 import { Settings } from 'screens/Settings';
 import { UserType } from 'screens/UserType';
 import { ProDashboard } from 'screens/ProDashboard';
+import { TrainerSelect } from 'screens/TrainerSelect';
 
 const ClientNavigator = createBottomTabNavigator({
     camera: { screen: CameraView },
@@ -22,6 +23,7 @@ export const MainNavigator = createBottomTabNavigator({
     welcome: { screen: WelcomeScreen },
     router: UserType,
     client: ClientNavigator,
+    trainerSelect: { screen: TrainerSelect },
     professional: ProfessionalNavigator,
 }, {
     animationEnabled: true,
