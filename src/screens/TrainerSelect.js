@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { wrapWithContext } from 'components/wrapWithContext';
-import { Button } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 import firebase from 'firebase';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    },
+    titleContainer: {
+        paddingHorizontal: 50,
+        marginTop: 50,
+    },
+    titleText: {
+        color: '#383B41',
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        flex: 1,
+        paddingHorizontal: 50,
+        paddingTop: 20,
     },
 });
 
@@ -39,18 +51,45 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
     }
 
     render() {
-        console.log(this.state.trainers, 'yo')
         return (
             <View style={styles.container}>
-                {
-                    this.state.trainers.map((trainer, i) => {
-                        return (
-                            <Text key={i}>
-                                {trainer.name}
-                            </Text>
-                        );
-                    })
-                }
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>
+                        Choose Your Trainer
+                    </Text>
+                </View>
+                <View style={styles.listContainer}>
+                    {
+                        this.state.trainers.map((trainer, i) => {
+                            return (
+                                <ListItem
+                                    key={i}
+                                    leftAvatar={{
+                                        source: { uri: trainer.photoURL },
+                                        rounded: true,
+                                    }}
+                                    title={trainer.name}
+                                    scaleProps={{
+                                        friction: 90,
+                                        tension: 100,
+                                        activeScale: 0.95,
+                                    }}
+                                    containerStyle={{
+                                        height: 100,
+                                        marginTop: 30,
+                                        shadowOffset: { width: 1, height: 1 },
+                                        shadowOpacity: 0.9,
+                                        shadowRadius: 25,
+                                        borderRadius: 25,
+                                        shadowColor: 'grey',
+                                        borderWidth: 0.5,
+                                        elevation: 3,
+                                    }}
+                                />
+                            );
+                        })
+                    }
+                </View>
             </View>
         );
     }
