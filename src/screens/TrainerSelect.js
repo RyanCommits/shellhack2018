@@ -45,8 +45,12 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
 
     onSelect = (uid) => {
         const userRef = firebase.database().ref(`users/${this.props.uid}`);
+        const trainerRef = firebase.database().ref(`users/${uid}/clients`);
 
         userRef.update({ professional: uid });
+        // add to a trainer's list of clients
+        trainerRef.push(this.props.uid);
+
         this.props.navigation.navigate('client');
     }
 
