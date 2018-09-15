@@ -48,6 +48,7 @@ export class App extends React.Component {
 
     async componentDidMount() {
         const token = await AsyncStorage.getItem('fb_token');
+        
         this.handleUserNavigation(token);
 
         emitter.on('new_user_token', this.startFirebase);

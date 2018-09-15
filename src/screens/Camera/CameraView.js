@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withNavigationFocus } from 'react-navigation';
 import Clarifai from 'clarifai';
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import { Button } from 'react-native-elements';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
 import { uploadImage } from '../../lib/uploads';
@@ -13,17 +14,42 @@ const styles = StyleSheet.create({
     cameraContainer: {
         flex: 1,
     },
+    reviewContainer: {
+        flex: 1,
+        marginTop: 30,
+        alignItems: 'center',
+    },
+    foodImage: {
+        width: Dimensions.get('screen').width * 0.75,
+        height: Dimensions.get('screen').width * 0.75,
+    },
+    foodDetailsContainer: {
+        flex: 1,
+        paddingTop: 30,
+    },
+    titleRow: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    buttonContainer: {
+        flex: 1,
+        height: 500,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export const CameraView = withNavigationFocus(wrapWithContext(class CameraView extends Component {
     state = {
         hasCameraPermission: null,
         type: Camera.Constants.Type.back,
+        foodName: '',
         imageUri: null,
+        loaded: true,
     };
 
     async componentDidMount() {
-        console.log('cameraView');
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
@@ -32,12 +58,10 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
 
     takePicture = async () => {
         const { app } = this.props;
-        // console.log(app, this.props, 'o9');
-        // this.props.showLoader();
 
-        // setTimeout(() => {
-        //     this.props.hideLoader();
-        // }, 5000)
+        this.props.showLoader();
+        this.setState({ loaded: false });
+
         process.nextTick = setImmediate;
         this.cameraRef.current.takePictureAsync({
             allowEditing: true,
@@ -52,26 +76,40 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
 
                 uploadImage(
                     blob,
-                    this.props.uid
+                    this.props.uid,
                 );
 
-                // return this.predictImage(app, image);
+                return this.predictImage(app, image);
             })
             .catch((err) => {
+                this.props.hideLoader();
+                this.setState({ loaded: true });
                 console.log(err, 'error');
             });
     }
 
     predictImage = (app, { base64 }) => {
-        console.log('iran', app);
         app.models.predict(Clarifai.FOOD_MODEL, { base64 })
             .then((res) => {
-                return console.log(res);
+                const foodName = res.outputs[0].data.concepts[0].name;
+
+                this.setState({ foodName });
+                this.setState({ loaded: true });
+                this.props.hideLoader();
+                return foodName;
             })
             .catch((err) => {
+                this.setState({ loaded: true });
+                this.props.hideLoader();
                 console.log(err);
             });
     };
+
+    onCancel = () => {
+        this.setState({
+            imageUri: null,
+        });
+    }
 
     render() {
         const { hasCameraPermission } = this.state;
@@ -82,15 +120,34 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
         } else if (hasCameraPermission === false) {
             return (
                 <Text>
-No access to camera
+                    No access to camera
                 </Text>
             );
         }
 
-        if (this.state.imageUri) {
+        if (this.state.imageUri && this.state.loaded) {
             return (
-                <View style={styles.container}>
-                    <Image style={{ width: 400, height: 800 }} source={{ uri: this.state.imageUri }}></Image>
+                <View style={styles.reviewContainer}>
+                    <Image style={styles.foodImage} source={{ uri: this.state.imageUri }}></Image>
+                    <View style={styles.foodDetailsContainer}>
+                        <View style={styles.titleRow}>
+                            <Text>
+                                {this.state.foodName}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title="Send To Nutritionist!"
+                            raised
+                            // onPress={this.props.onComplete}
+                        />
+                        <Button
+                            title="Cancel!"
+                            raised
+                            onPress={this.onCancel}
+                        />
+                    </View>
                 </View>
             );
         }
