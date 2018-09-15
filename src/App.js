@@ -64,6 +64,8 @@ export class App extends React.Component {
                     handlePushToken(uid);
 
                     return userRef.once('value').then((snapshot) => {
+                        const data = snapshot.val();
+
                         if (!snapshot.exists()) {
                             const { displayName, photoURL } = providerData[0];
 
@@ -73,10 +75,11 @@ export class App extends React.Component {
                             });
                         }
 
-                        if (snapshot.userType) {
-                            this.setState({ userType: snapshot.userType });
+                        if (data.userType) {
+                            this.setState({ userType: data.userType });
                         }
 
+                        navigate('router');
                         return this.hideLoader();
                     });
                 }
@@ -88,7 +91,6 @@ export class App extends React.Component {
         Notifications.addListener((notification) => {
             const { data: { text }, origin } = notification;
 
-            console.log(notification, 'received');
             if (origin === 'received' && text) {
                 Alert.alert(
                     'New Push Notification',
@@ -111,12 +113,6 @@ export class App extends React.Component {
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
         firebase.auth().signInAndRetrieveDataWithCredential(credential)
-            .then((result) => {
-                if (result) {
-                    navigate('main');
-                }
-                return this.hideLoader();
-            })
             .catch((error) => {
                 console.log(error);
                 return this.hideLoader();
