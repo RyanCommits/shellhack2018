@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     },
     foodImage: {
-        height: Dimensions.get('screen').width * 0.70,
+        height: Dimensions.get('screen').width * 0.60,
     },
     titleRow: {
         marginTop: 10,
@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     largeText: {
-        fontSize: 36,
+        fontSize: 30,
         fontWeight: 'bold',
     },
     normalText: {
-        fontSize: 24,
+        fontSize: 20,
     },
     macrosContainer: {
         flex: 1,
@@ -205,6 +205,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                     <View style={styles.macrosContainer}>
                         <ListItem
                             title="Calories"
+                            containerStyle={{ paddingVertical: 10 }}
                             rightSubtitle={
                                 <Text>
                                     {this.state.calories}
@@ -213,6 +214,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                         />
                         <ListItem
                             title="Protein"
+                            containerStyle={{ paddingVertical: 10 }}
                             rightSubtitle={
                                 <Text>
                                     {this.state.protein}
@@ -221,6 +223,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                         />
                         <ListItem
                             title="Carbs"
+                            containerStyle={{ paddingVertical: 10 }}
                             rightSubtitle={
                                 <Text>
                                     {this.state.carbs}
@@ -229,6 +232,7 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                         />
                         <ListItem
                             title="Fat"
+                            containerStyle={{ paddingVertical: 10 }}
                             rightSubtitle={
                                 <Text>
                                     {this.state.fat}
