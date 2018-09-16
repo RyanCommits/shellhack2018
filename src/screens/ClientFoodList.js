@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { StyleSheet, Text, ScrollView, View, Image } from 'react-native';
-import { Card, Icon, Avatar, Divider } from 'react-native-elements';
+import { Card, Icon, Avatar, Divider, Header } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
 import FoodApprovalButtons from '../components/FoodApprovalButtons';
@@ -15,11 +15,16 @@ const styles = StyleSheet.create({
 export const ClientFoodList = wrapWithContext(class ClientFoodList extends Component {
     state = {
         foods: [],
+        user: null,
     };
 
     componentDidMount() {
         const { uid } = this.props.navigation.state.params;
         const ref = firebase.database().ref(`foods/${uid}`);
+
+        firebase.database().ref(`users/${uid}`).once('value', (snapshot) => {
+            this.setState({ user: snapshot.val() });
+        });
 
         ref.on('child_added', (snapshot) => {
             this.setState((prevState) => ({
@@ -57,7 +62,13 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
 
         return (
             <View style={styles.container}>
-                <ScrollView>
+                <Header
+                    leftComponent={{ icon: 'chevron-left', color: '#fff', size: 48, onPress: () => this.props.navigation.goBack() }}
+                    centerComponent={{ text: this.state.user && this.state.user.name, style: { fontSize: 32, color: '#fff' } }}
+                    outerContainerStyles={{ position: 'absolute', top: 0, left: 0, right: 0, height: 100 }}
+                    backgroundColor='#F8BA85'
+                />
+                <ScrollView style={{ marginTop: 100 }}>
                     <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
                         New Meals
                     </Text>
