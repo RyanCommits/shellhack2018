@@ -82,7 +82,6 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
         this.cameraRef.current.takePictureAsync({
             allowEditing: true,
             base64: true,
-            quality: 0.99,
         })
             .then((image) => {
                 this.setState({ imageUri: image.uri });

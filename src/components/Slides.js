@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, Image, ImageBackground } from 'react-native';
 import PropTypes from 'prop-types';
 import { Button } from 'react-native-elements';
 
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         fontWeight: 'bold',
         fontSize: 28,
+        paddingHorizontal: 20,
         marginBottom: 20,
     },
     textStyle: {
@@ -27,9 +28,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
     },
     buttonContainerStyle: {
-        marginTop: 15,
+        marginTop: 85,
+        borderRadius: 25,
     },
     buttonStyle: {
+        borderRadius: 25,
+        backgroundColor: '#F8BA85',
         paddingHorizontal: 10,
         paddingVertical: 3,
     },
@@ -38,6 +42,34 @@ const styles = StyleSheet.create({
 export class Slides extends Component {
     renderSlides() {
         return this.props.data.map((slide, i) => {
+            if (i === this.props.data.length - 1) {
+                return (
+                    <ImageBackground
+                        key={slide.id}
+                        resizeMode='cover'
+                        style={[styles.slide, { paddingTop: 150, alignItems: 'center' }]}
+                        source={require('../../assets/images/background_1.png')}
+                    >
+                        <Image
+                            source={require('../../assets/images/logo1.png')}
+                            resizeMode='contain'
+                            style={{
+                                height: 100,
+                                width: '85%',
+                            }}
+                        >
+                        </Image>
+                        <Button
+                            title="LOG IN WITH FACEBOOK"
+                            raised
+                            containerStyle={styles.buttonContainerStyle}
+                            buttonStyle={styles.buttonStyle}
+                            onPress={this.props.onComplete}
+                        />
+                    </ImageBackground>
+                );
+            }
+
             return (
                 <View
                     key={slide.id}
@@ -58,17 +90,6 @@ export class Slides extends Component {
                     <Text style={styles.textStyle}>
                         {slide.text}
                     </Text>
-
-                    {
-                        i === this.props.data.length - 1 &&
-                            <Button
-                                title="Let's Get Started!"
-                                raised
-                                containerStyle={styles.buttonContainerStyle}
-                                buttonStyle={styles.buttonStyle}
-                                onPress={this.props.onComplete}
-                            />
-                    }
                 </View>
             );
         });

@@ -13,7 +13,7 @@ import { ClientFoodList } from 'screens/ClientFoodList';
 const styles = {
     navContainer: {
         backgroundColor: "#EFEDF3",
-        height: 70,
+        height: 55,
     }
 }
 const ClientNavigator = createBottomTabNavigator(
@@ -21,13 +21,13 @@ const ClientNavigator = createBottomTabNavigator(
     camera: { 
         screen: CameraView,
         navigationOptions: {
-            tabBarIcon: () => <Icon size={50} name='camera' type='evilicon' color='#BDBAC4' />
+            tabBarIcon: () => <Icon size={35} name='camera' type='evilicon' color='#BDBAC4' />
         }
     },
     settings: { 
         screen: Settings,
         navigationOptions: {
-            tabBarIcon: () => <Icon size={50} name='gear' type='evilicon' color='#BDBAC4' />
+            tabBarIcon: () => <Icon size={35} name='gear' type='evilicon' color='#BDBAC4' />
         }
     },
 },

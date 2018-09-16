@@ -26,6 +26,10 @@ const SLIDE_DATA = [
         text: 'Your nutritionist gives you points for eating right',
         image: require('../../assets/images/Nutritionist.png'),
     },
+    {
+        id: 'welcome_screen_2',
+        image: require('../../assets/images/background_1.png'),
+    },
 ];
 
 export const WelcomeScreen = wrapWithContext(class WelcomeScreen extends Component {
