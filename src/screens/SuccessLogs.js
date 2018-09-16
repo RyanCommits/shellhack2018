@@ -91,12 +91,9 @@ export const SuccessLogs = wrapWithContext(class SuccessLogs extends Component {
         return (
             <View style={styles.container}>
                 <View style={ styles.title }>
-                <Text style={ styles.titleText }>
-                    Your score is
-                </Text>
-                <Text style={ styles.titlePercentage }>
-                    { this.getPercentage().toPrecision(3) }%
-                </Text>
+                    <Text style={ styles.titleText }>
+                        {`Your score is ${this.getPercentage().toPrecision(3)}%`}
+                    </Text>
                 </View>
                 <Image source={ require('../../assets/images/trophy.png') } />
                 <View style={ styles.mealContainter }>
