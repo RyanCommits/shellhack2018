@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { withNavigationFocus } from 'react-navigation';
 import Clarifai from 'clarifai';
 import { Text, View, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
@@ -6,6 +7,7 @@ import { Button } from 'react-native-elements';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
 import { uploadImage } from '../../lib/uploads';
+import firebase from 'firebase';
 
 const styles = StyleSheet.create({
     container: {
@@ -15,7 +17,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        
     },
     reviewContainer: {
         flex: 1,
@@ -110,7 +111,26 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
             { name: this.state.foodName }
         );
 
+        this.sendNotificationToTrainer();
         this.onCancel();
+    }
+
+    sendNotificationToTrainer = () => {
+        const trainerRef = firebase.database().ref(`users/${this.props.uid}/professional`);
+
+        trainerRef.once('value')
+            .then((snapshot) => {
+                axios.post('https://us-central1-shellhacks2018.cloudfunctions.net/sendNotification', {
+                    uid: snapshot,
+                    text: 'Your client sent you a meal!',
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            });
     }
 
     onCancel = () => {
