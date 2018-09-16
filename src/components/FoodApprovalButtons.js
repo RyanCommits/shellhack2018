@@ -16,15 +16,18 @@ const FoodApprovalButtons = ({ handleApproveFood, handleDenyFood }) => {
         <View style={styles.buttonContainer}>
             <Icon
                 raised
-                name='check'
-                color='#4CAF50'
-                onPress={handleApproveFood}
-            />
-            <Icon
-                raised
                 name='close'
                 color='#f50'
                 onPress={handleDenyFood}
+                size={32}
+            />
+            <Icon
+                reverse
+                raised
+                name='check'
+                color='#F8BA85'
+                onPress={handleApproveFood}
+                size={32}
             />
         </View>
     );
