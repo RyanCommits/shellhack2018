@@ -9,6 +9,7 @@ import { UserType } from 'screens/UserType';
 import { ProDashboard } from 'screens/ProDashboard';
 import { TrainerSelect } from 'screens/TrainerSelect';
 import { ClientFoodList } from 'screens/ClientFoodList';
+import { SuccessLogs } from 'screens/SuccessLogs';
 
 const styles = {
     navContainer: {
@@ -18,6 +19,12 @@ const styles = {
 }
 const ClientNavigator = createBottomTabNavigator(
 {
+    logs: {
+        screen: SuccessLogs,
+        navigationOptions: {
+            tabBarIcon: () => <Icon size={35} name='trophy' type='evilicon' color='#BDBAC4' />
+        }
+    },
     camera: { 
         screen: CameraView,
         navigationOptions: {

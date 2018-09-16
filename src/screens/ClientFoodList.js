@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { StyleSheet, Text, ScrollView, View, Image } from 'react-native';
-import { Card, Icon, Avatar, Divider, Button } from 'react-native-elements';
+import { Card, Icon, Avatar, Divider, Button, Header } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
 import FoodApprovalButtons from '../components/FoodApprovalButtons';
