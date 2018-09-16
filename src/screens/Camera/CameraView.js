@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { withNavigationFocus } from 'react-navigation';
 import Clarifai from 'clarifai';
 import { View, TouchableOpacity, StyleSheet, Image, Dimensions, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, ListItem } from 'react-native-elements';
 import { Camera, Permissions } from 'expo';
 import { wrapWithContext } from 'components/wrapWithContext';
 import { uploadImage } from '../../lib/uploads';
@@ -15,17 +16,18 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        
+
     },
     reviewContainer: {
         flex: 1,
-        padding: 30,
+        paddingHorizontal: 30,
+        paddingTop: 30,
     },
     foodImage: {
-        height: Dimensions.get('screen').width * 0.75,
+        height: Dimensions.get('screen').width * 0.70,
     },
     titleRow: {
-        marginTop: 25,
+        marginTop: 10,
         paddingBottom: 5,
         flexDirection: 'row',
         borderBottomColor: '#F8BA85',
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     buttonContainer: {
-        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
@@ -45,6 +47,9 @@ const styles = StyleSheet.create({
     normalText: {
         fontSize: 24,
     },
+    macrosContainer: {
+        flex: 1,
+    },
 });
 
 export const CameraView = withNavigationFocus(wrapWithContext(class CameraView extends Component {
@@ -54,6 +59,10 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
         foodName: '',
         imageUri: null,
         loaded: true,
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
     };
 
     async componentDidMount() {
@@ -89,10 +98,19 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
 
     predictImage = (app, { base64 }) => {
         app.models.predict(Clarifai.FOOD_MODEL, { base64 })
-            .then((res) => {
+            .then(async (res) => {
                 const foodName = res.outputs[0].data.concepts[0].name;
 
-                this.setState({ foodName });
+                const { data: { foods } } = await this.getNutrition(foodName);
+                const nutrients = foods[0];
+                const {
+                    nf_calories: calories,
+                    nf_total_fat: fat,
+                    nf_total_carbohydrate: carbs,
+                    nf_protein: protein,
+                } = nutrients;
+
+                this.setState({ foodName, calories, fat, carbs, protein });
                 this.setState({ loaded: true });
                 this.props.hideLoader();
                 return foodName;
@@ -111,7 +129,12 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
         await uploadImage(
             blob,
             this.props.uid,
-            { name: this.state.foodName }
+            {
+                name: this.state.foodName,
+                protein: this.state.protein,
+                carbs: this.state.carbs,
+                fat: this.state.fat,
+            }
         );
 
         this.onCancel();
@@ -121,6 +144,18 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
         this.setState({
             imageUri: null,
         });
+    }
+
+    getNutrition = (food) => {
+        const url = 'https://trackapi.nutritionix.com/v2/natural/nutrients';
+        const body = { query: food };
+        const headers = {
+            'x-app-id': 'c237898c',
+            'x-app-key': '6901b68309ec08d4e90ea0ffff154d54',
+            'cache-control': 'no-cache',
+        };
+
+        return axios.post(url, body, { headers });
     }
 
     render() {
@@ -146,8 +181,42 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                             {this.state.foodName}
                         </Text>
                         <Text style={styles.normalText}>
-                                1 cup
+                            1 serving
                         </Text>
+                    </View>
+                    <View style={styles.macrosContainer}>
+                        <ListItem
+                            title="Calories"
+                            rightSubtitle={
+                                <Text>
+                                    {this.state.calories}
+                                </Text>
+                            }
+                        />
+                        <ListItem
+                            title="Protein"
+                            rightSubtitle={
+                                <Text>
+                                    {this.state.protein}
+                                </Text>
+                            }
+                        />
+                        <ListItem
+                            title="Carbs"
+                            rightSubtitle={
+                                <Text>
+                                    {this.state.carbs}
+                                </Text>
+                            }
+                        />
+                        <ListItem
+                            title="Fat"
+                            rightSubtitle={
+                                <Text>
+                                    {this.state.fat}
+                                </Text>
+                            }
+                        />
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button
@@ -209,28 +278,28 @@ export const CameraView = withNavigationFocus(wrapWithContext(class CameraView e
                             onPress={this.takePicture}
                             title=''
                             buttonStyle={{
-                            backgroundColor: "#fff",
-                            opacity: 0.7,
-                            width: 60,
-                            height: 60,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            marginBottom: -180,
-                            borderRadius: 33
+                                backgroundColor: '#fff',
+                                opacity: 0.7,
+                                width: 60,
+                                height: 60,
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                marginBottom: -180,
+                                borderRadius: 33,
                             }}
                         />
                         <Button
                             onPress={this.takePicture}
                             title=''
                             buttonStyle={{
-                            backgroundColor: "#fff",
-                            opacity: 0.6,
-                            width: 80,
-                            height: 80,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            marginTop: -10,
-                            borderRadius: 40
+                                backgroundColor: '#fff',
+                                opacity: 0.6,
+                                width: 80,
+                                height: 80,
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                marginTop: -10,
+                                borderRadius: 40,
                             }}
                         />
                     </View>
