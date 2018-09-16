@@ -9,11 +9,23 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
     },
-    titleText: {
+    title:{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingTop: 40,
         paddingBottom: 15,
+        width: '75%',
+    },
+    titleText: {
         color: '#383B41',
         fontSize: 30,
+        fontWeight: 'bold',
+    },
+    titlePercentage: {
+        color: '#383B41',
+        fontSize: 35,
         fontWeight: 'bold',
     },
     mealContainter: {
@@ -78,9 +90,14 @@ export const SuccessLogs = wrapWithContext(class SuccessLogs extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.titleText}>
-                    Your score is { this.getPercentage().toPrecision(3) }%
+                <View style={ styles.title }>
+                <Text style={ styles.titleText }>
+                    Your score is
                 </Text>
+                <Text style={ styles.titlePercentage }>
+                    { this.getPercentage().toPrecision(3) }%
+                </Text>
+                </View>
                 <Image source={ require('../../assets/images/trophy.png') } />
                 <View style={ styles.mealContainter }>
                     <View style={ styles.mealInnerContainter } >
