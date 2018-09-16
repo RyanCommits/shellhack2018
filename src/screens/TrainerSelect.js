@@ -68,10 +68,8 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
                             return (
                                 <ListItem
                                     style={{
-                                      height: '100%',
-                                      width: 500,
-                                      justifyContent: 'flex-start',
-                                      alignItems: 'center'
+                                        minHeight: 150,
+                                        alignItems: 'center',
                                     }}
                                     onPress={() => this.onSelect(trainer.uid)}
                                     key={i}

@@ -67,8 +67,7 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
                             return (
                                 <ListItem
                                     style={{
-                                        width: 500,
-                                        justifyContent: 'flex-start',
+                                        minHeight: 150,
                                         alignItems: 'center',
                                     }}
                                     onPress={() => this.onSelect(client.uid)}
