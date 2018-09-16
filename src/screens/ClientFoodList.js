@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView, View } from 'react-native';
-import { Card } from 'react-native-elements';
+import React, { Component, Fragment } from 'react';
+import { StyleSheet, Text, ScrollView, View, Image } from 'react-native';
+import { Card, Icon, Avatar, Divider } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
 import FoodApprovalButtons from '../components/FoodApprovalButtons';
-import FoodApprovalOutcome from '../components/FoodApprovalOutcome';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 15,
     },
 });
 
@@ -52,34 +52,105 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
     }
 
     render() {
+        const notApprovedFoods = this.state.foods.filter((food) => food.approvedBy === false);
+        const approvedFoods = this.state.foods.filter((food) => !(food.approvedBy === false));
+
         return (
             <View style={styles.container}>
+                <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
+                    New Meals
+                </Text>
                 <ScrollView>
                     {
-                    this.state.foods.map((food) => {
-                        return (
-                            <Card
-                                key={food.id}
-                                title='Food name here (from meta)'
-                                image={{ uri: food.url }}
-                            >
-                                <Text style={{ marginBottom: 10 }}>
-                                    Macros here
-                                </Text>
-                                {
-                                    food.approvedBy !== false ?
-                                        <FoodApprovalOutcome food={food}/>
-                                        :
-                                        <FoodApprovalButtons
-                                            handleApproveFood={() => this.handleApproveFood(food)}
-                                            handleDenyFood={() => this.handleDenyFood(food)}
-                                        />
-                                }
-
-                            </Card>
-                        );
-                    })
-                }
+                        notApprovedFoods.map((food) => {
+                            return (
+                                <Card
+                                    containerStyle={{ padding: 30, borderRadius: 25 }}
+                                    key={food.id}
+                                    title={(
+                                        <View style={{ marginBottom: 10, flexDirection: 'row', justifyContent: 'space-between', alignContent: 'flex-end' }}>
+                                            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+                                                {food.name}
+                                            </Text>
+                                            <Text style={{ fontSize: 18 }}>
+                                                1 serving
+                                            </Text>
+                                        </View>
+                                    )}
+                                >
+                                    <View style={{ alignItems: 'stretch', flexWrap: 'nowrap', flexDirection: 'row', marginBottom: 10 }}>
+                                        <Image style={{ width: 150, height: 150 }} source={{ uri: food.url }}/>
+                                        <View style={{ flexDirection: 'column', justifyContent: 'space-around', marginLeft: 15 }}>
+                                            <Text style={{ fontSize: 18 }}>
+                                                Carbs -
+                                                {' '}
+                                                {food.carbs}
+                                            </Text>
+                                            <Text style={{ fontSize: 18 }}>
+                                                Protein -
+                                                {' '}
+                                                {food.protein}
+                                            </Text>
+                                            <Text style={{ fontSize: 18 }}>
+                                                Fat -
+                                                {' '}
+                                                {food.fat}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <FoodApprovalButtons
+                                        handleApproveFood={() => this.handleApproveFood(food)}
+                                        handleDenyFood={() => this.handleDenyFood(food)}
+                                    />
+                                </Card>
+                            );
+                        })
+                    }
+                    <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
+                        History
+                    </Text>
+                    <View>
+                        {
+                            approvedFoods.map((food) => {
+                                return (
+                                    <Fragment key={food.url}>
+                                        <View
+                                            style={{
+                                                paddingHorizontal: 30,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Avatar
+                                                size='large'
+                                                rounded={false}
+                                                source={{ uri: food.url }}
+                                            />
+                                            <Text style={{ fontSize: 24 }}>
+                                                {food.name}
+                                            </Text>
+                                            {
+                                                food.approvedBy === 'denied' ?
+                                                    <Icon
+                                                        size={32}
+                                                        name='close'
+                                                        color='#f50'
+                                                    />
+                                                    :
+                                                    <Icon
+                                                        size={32}
+                                                        name='check'
+                                                        color='#F8BA85'
+                                                    />
+                                            }
+                                        </View>
+                                        <Divider style={{ marginVertical: 10 }}/>
+                                    </Fragment>
+                                );
+                            })
+                        }
+                    </View>
                 </ScrollView>
             </View>
         );
