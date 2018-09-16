@@ -46,10 +46,10 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
         });
     }
 
-    onSelect = (uid) => {
+    onSelect = (uid, name, photo) => {
         this.props.navigation.navigate(
             'clientFoodList',
-            { uid }
+            { uid, name, photo }
         );
     }
 
@@ -70,7 +70,7 @@ export const ProDashboard = wrapWithContext(class Friends extends Component {
                                         minHeight: 150,
                                         alignItems: 'center',
                                     }}
-                                    onPress={() => this.onSelect(client.uid)}
+                                    onPress={() => this.onSelect(client.uid, client.name, client.photoURL)}
                                     key={i}
                                     leftAvatar={{
                                         source: { uri: client.photoURL },

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { StyleSheet, Text, ScrollView, View, Image } from 'react-native';
-import { Card, Icon, Avatar, Divider } from 'react-native-elements';
+import { Card, Icon, Avatar, Divider, Button } from 'react-native-elements';
 import { wrapWithContext } from 'components/wrapWithContext';
 import firebase from 'firebase';
 import FoodApprovalButtons from '../components/FoodApprovalButtons';
@@ -8,17 +8,30 @@ import FoodApprovalButtons from '../components/FoodApprovalButtons';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
     },
+    header: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -130
+    },
+    headerText: {
+        color: '#FFF',
+        fontSize: 32,
+        marginBottom: 12,
+        fontWeight: '800',
+    }
 });
 
 export const ClientFoodList = wrapWithContext(class ClientFoodList extends Component {
     state = {
         foods: [],
+        clientInfo: {}
     };
 
     componentDidMount() {
-        const { uid } = this.props.navigation.state.params;
+        const { uid, name, photo } = this.props.navigation.state.params;
+        this.state.clientInfo = { name, photo }
         const ref = firebase.database().ref(`foods/${uid}`);
 
         ref.on('child_added', (snapshot) => {
@@ -51,6 +64,12 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
         foodRef.update({ approvedBy: 'denied' });
     }
 
+    onSelect = () => {
+        this.props.navigation.navigate(
+            'dashboard'
+        );
+    }
+
     render() {
         const notApprovedFoods = this.state.foods.filter((food) => food.approvedBy === false);
         const approvedFoods = this.state.foods.filter((food) => !(food.approvedBy === false));
@@ -58,7 +77,35 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
+                    <Image style={{ height: 150 }} source={ require('../../assets/images/button_background_1.png') } />
+                    <View style={styles.header} >
+                    <Button
+                        icon={
+                        <Icon
+                            name='chevron-left'
+                            size={50}
+                            color='white'
+                            onPress={() => this.onSelect()}
+                        />
+                        }
+                        buttonStyle={{ backgroundColor: "transparent",  elevation: 0, borderRadius: 0 }}
+                        containerStyle={{ elevation: 0, borderRadius: 0, position: 'absolute', top: 0, left: 0 }}
+
+                        title=''
+                        />
+                        <Text style={styles.headerText}>{ this.state.clientInfo.name }</Text>
+                        <Avatar
+                            size="xlarge"
+                            rounded
+                            source={{uri: this.state.clientInfo.photo }}
+                            activeOpacity={0.7}
+                            avatarStyle={{
+                                borderWidth: 7,
+                                borderColor: '#FFF',
+                            }}
+                        />
+                    </View>
+                    <Text style={{ padding: 30, fontSize: 28, fontWeight: 'bold' }}>
                         New Meals
                     </Text>
                     {
@@ -106,7 +153,7 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
                             );
                         })
                     }
-                    <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
+                    <Text style={{ padding: 30, fontSize: 28, fontWeight: 'bold' }}>
                         History
                     </Text>
                     <View>
