@@ -57,10 +57,10 @@ export const ClientFoodList = wrapWithContext(class ClientFoodList extends Compo
 
         return (
             <View style={styles.container}>
-                <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
-                    New Meals
-                </Text>
                 <ScrollView>
+                    <Text style={{ padding: 30, fontSize: 32, fontWeight: 'bold' }}>
+                        New Meals
+                    </Text>
                     {
                         notApprovedFoods.map((food) => {
                             return (
