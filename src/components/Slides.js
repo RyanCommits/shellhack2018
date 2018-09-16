@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, Image } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button, Avatar } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const DEFAULT_FONT_SIZE = 20;
 
 const styles = StyleSheet.create({
     container: {
@@ -12,20 +11,20 @@ const styles = StyleSheet.create({
     },
     slide: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         width: SCREEN_WIDTH,
-        paddingHorizontal: 30,
+        marginTop: 30,
     },
     headerStyle: {
-        color: 'green',
-        fontSize: DEFAULT_FONT_SIZE * 1.2,
-        marginBottom: 50,
+        textAlign: 'center',
+        marginTop: 30,
+        fontWeight: 'bold',
+        fontSize: 28,
+        marginBottom: 20,
     },
     textStyle: {
-        fontSize: DEFAULT_FONT_SIZE,
+        fontSize: 20,
         textAlign: 'center',
-        marginTop: 50,
+        marginHorizontal: 30,
     },
     buttonContainerStyle: {
         marginTop: 15,
@@ -44,11 +43,17 @@ export class Slides extends Component {
                     key={slide.id}
                     style={styles.slide}
                 >
+                    <Image
+                        source={slide.image}
+                        resizeMode='cover'
+                        style={{
+                            width: '100%',
+                            height: 360,
+                        }}
+                    />
                     <Text style={styles.headerStyle}>
                         {slide.header}
                     </Text>
-
-                    <Avatar size="xlarge" rounded source={ slide.image }/>
 
                     <Text style={styles.textStyle}>
                         {slide.text}

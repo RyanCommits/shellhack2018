@@ -16,15 +16,15 @@ const styles = StyleSheet.create({
 const SLIDE_DATA = [
     {
         id: 'welcome_screen_0',
-        header: 'Welcome to CanIEatThis?',
-        text: 'An app that let\'s you vote on your next meal.',
-        image: require('../../assets/images/hotDogs.jpg'),
+        header: 'Capture Your Meals',
+        text: 'Use AI technology and track what you eat',
+        image: require('../../assets/images/Camera.png'),
     },
     {
         id: 'welcome_screen_1',
-        header: 'Do this to App, Magic!',
-        text: 'Test paragraph here.',
-        image: require('../../assets/images/hotDogs.jpg'),
+        header: 'Keep Yourself Accountable',
+        text: 'Your nutritionist gives you points for eating right',
+        image: require('../../assets/images/Nutritionist.png'),
     },
 ];
 

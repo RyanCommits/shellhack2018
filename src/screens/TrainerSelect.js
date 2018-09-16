@@ -67,12 +67,6 @@ export const TrainerSelect = wrapWithContext(class Friends extends Component {
                         this.state.trainers.map((trainer, i) => {
                             return (
                                 <ListItem
-                                    style={{
-                                      height: '100%',
-                                      width: 500,
-                                      justifyContent: 'flex-start',
-                                      alignItems: 'center'
-                                    }}
                                     onPress={() => this.onSelect(trainer.uid)}
                                     key={i}
                                     leftAvatar={{
